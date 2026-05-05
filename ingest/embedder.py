@@ -2,37 +2,28 @@ import json
 import os
 import sys
 from pathlib import Path
-import google.generativeai as genai
-from dotenv import load_dotenv
+from fastembed import TextEmbedding
 
 # Add root to path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from src.config import CHUNKED_DATA_DIR, EMBEDDED_DATA_DIR, EMBEDDING_MODEL
 
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
 def embed():
     os.makedirs(EMBEDDED_DATA_DIR, exist_ok=True)
+    # FastEmbed uses ONNX and is much lighter than sentence-transformers
+    model = TextEmbedding(model_name=EMBEDDING_MODEL)
     
     for file in CHUNKED_DATA_DIR.glob("*.json"):
-        print(f"Embedding {file.name} via Gemini API...")
+        print(f"Embedding {file.name} via FastEmbed...")
         with open(file, "r", encoding="utf-8") as f:
             chunks = json.load(f)
             
         texts = [c["content"] for c in chunks]
-        
-        # Batch embedding via API
-        response = genai.embed_content(
-            model=EMBEDDING_MODEL,
-            content=texts,
-            task_type="retrieval_document"
-        )
-        embeddings = response['embedding']
+        embeddings = list(model.embed(texts))
         
         output = []
         for chunk, emb in zip(chunks, embeddings):
-            chunk["embedding"] = emb
+            chunk["embedding"] = emb.tolist()
             output.append(chunk)
             
         output_path = EMBEDDED_DATA_DIR / file.name
