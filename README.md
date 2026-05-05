@@ -1,6 +1,6 @@
-# Mutual Fund FAQ Assistant
+# HDFC Mutual Fund FAQ Chatbot (Groww UX)
 
-A facts-only Retrieval-Augmented Generation (RAG) assistant for mutual fund schemes using Groww as the reference product context.
+A facts-only Retrieval-Augmented Generation (RAG) assistant for mutual fund schemes using Groww as the reference product context. Built with **FastAPI**, **ChromaDB**, **Gemini/Groq**, and **Next.js**.
 
 ## Overview
 This assistant answers objective, verifiable queries related to mutual funds by retrieving information from official public sources. It strictly avoids providing investment advice, opinions, or recommendations.
@@ -15,35 +15,36 @@ This assistant answers objective, verifiable queries related to mutual funds by 
 5. HDFC Large Cap Fund Direct Growth
 
 ## Architecture Overview (RAG Approach)
-The project is built in distinct phases:
-- **Phase 1: Ingestion Pipeline:** Fetches official URLs, extracts factual data and tables, cleans it, logically chunks the facts, generates embeddings using `bge-small-en-v1.5`, and stores them in **ChromaDB**. It uses a GitHub Action for weekly scheduling.
-- **Phase 2: Hybrid Retrieval:** Uses metadata filtering to isolate the specific fund being queried (e.g., extracting "HDFC Mid Cap" from the query) followed by semantic search using vector similarity to find the precise fact.
-- **Phase 3: Generation:** Uses Google Gemini (2.5-flash) to strictly generate factual answers limited to 3 sentences, appending exactly one source link. Refuses PII and advisory questions.
-- **Phase 4: User Interface:** A minimalistic Streamlit application.
-
-## Known Limitations
-- The logical chunking strategy depends on the structural consistency of Groww's product pages. Changes in DOM structure may require updating the extraction logic.
-- Performance and API limits are subject to Google Gemini and Hugging Face Hub (if downloading models on the fly).
-- Table structures that exceed the token limit of the embedding model may be truncated.
+The project is built using a modern decoupled architecture:
+- **Ingestion Pipeline (`ingest/`):** Fetches Groww URLs, extracts factual data, chunks text, generates embeddings, and stores them in **ChromaDB**.
+- **Backend API (`runtime/`):** A **FastAPI** server that handles semantic retrieval, safety filtering, and LLM generation (supporting both Gemini and Groq).
+- **Frontend (`frontend/`):** A **Next.js** application with a premium Groww-themed UI and floating chat widget.
 
 ## Setup Instructions
 1. **Clone the repository.**
-2. **Install dependencies:**
+2. **Install Python dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
-3. **Run the full ingestion pipeline:**
+3. **Run the ingestion pipeline:**
    ```bash
-   python src/run_ingestion.py
+   python ingest/scraper.py && python ingest/embedder.py && python ingest/vector_store.py
    ```
-   *(This will run phases 1.1 through 1.6 and populate the ChromaDB)*
-4. **Set your Gemini API Key:**
-   - Create a `.env` file in the root directory and add: `GEMINI_API_KEY=your_key_here`
-   - Alternatively, you can enter it securely in the UI.
-5. **Run the Streamlit Interface:**
+4. **Configure API Keys:**
+   Create a `.env` file in the root:
+   ```
+   GEMINI_API_KEY=your_gemini_key
+   GROQ_API_KEY=your_groq_key (optional)
+   ```
+5. **Start the Backend:**
    ```bash
-   streamlit run src/phase4_ui/app.py
+   python runtime/phase_9_api/main.py
+   ```
+6. **Start the Frontend:**
+   ```bash
+   cd frontend
+   npm run dev
    ```
 
-## Disclaimer Snippet
-**"Facts-only. No investment advice."**
+## Disclaimer
+**"Facts-only. No investment advice. Always consult a SEBI-registered financial advisor before investing."**

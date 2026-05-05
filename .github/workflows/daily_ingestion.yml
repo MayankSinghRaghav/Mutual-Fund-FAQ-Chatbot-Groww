@@ -25,7 +25,10 @@ jobs:
           
       - name: Run Ingestion Pipeline
         run: |
-          python src/run_ingestion.py
+          python ingest/scraper.py
+          python ingest/chunker.py
+          python ingest/embedder.py
+          python ingest/vector_store.py
           
       - name: Commit and Push Changes
         run: |

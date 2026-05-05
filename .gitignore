@@ -9,18 +9,21 @@ __pycache__/
 env/
 venv/
 ENV/
-env.bak/
-venv.bak/
 
-# Project specific
+# Data
 data/raw/
-data/processed/
-# data/chroma_db is NOT ignored so GitHub Actions can push updates
+data/chunked/
+data/embedded/
+# We keep data/chroma for now so the app works on clone
+
+# Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.DS_Store
+*.pem
 
 # IDEs
 .vscode/
 .idea/
-
-# Streamlit
-streamlit_log.txt
-.streamlit/

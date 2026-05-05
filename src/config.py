@@ -6,22 +6,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
-CHROMA_DB_DIR = DATA_DIR / "chroma_db"
+CHUNKED_DATA_DIR = DATA_DIR / "chunked"
+EMBEDDED_DATA_DIR = DATA_DIR / "embedded"
+VECTOR_DB_DIR = DATA_DIR / "chroma"
 
 # Ensure directories exist
-for d in [RAW_DATA_DIR, PROCESSED_DATA_DIR, CHROMA_DB_DIR]:
+for d in [RAW_DATA_DIR, PROCESSED_DATA_DIR, CHUNKED_DATA_DIR, EMBEDDED_DATA_DIR, VECTOR_DB_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
-# Phase 0: Corpus Definition
-TARGET_URLS = [
-    "https://groww.in/mutual-funds/hdfc-mid-cap-fund-direct-growth",
-    "https://groww.in/mutual-funds/hdfc-equity-fund-direct-growth",
-    "https://groww.in/mutual-funds/hdfc-focused-fund-direct-growth",
-    "https://groww.in/mutual-funds/hdfc-elss-tax-saver-fund-direct-plan-growth",
-    "https://groww.in/mutual-funds/hdfc-large-cap-fund-direct-growth"
-]
+# Corpus Definition
+SCHEME_URLS = {
+    "HDFC Mid-Cap Fund": "https://groww.in/mutual-funds/hdfc-mid-cap-fund-direct-growth",
+    "HDFC Equity Fund": "https://groww.in/mutual-funds/hdfc-equity-fund-direct-growth",
+    "HDFC Focused Fund": "https://groww.in/mutual-funds/hdfc-focused-fund-direct-growth",
+    "HDFC ELSS Tax Saver": "https://groww.in/mutual-funds/hdfc-elss-tax-saver-fund-direct-plan-growth",
+    "HDFC Large Cap Fund": "https://groww.in/mutual-funds/hdfc-large-cap-fund-direct-growth"
+}
 
-# Phase 1 Settings
+# RAG Settings
 EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
-CHUNK_SIZE = 400
+CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
