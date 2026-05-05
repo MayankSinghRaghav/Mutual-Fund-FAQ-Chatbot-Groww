@@ -1,0 +1,147 @@
+/* HDFC Theme Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --hdfc-blue: #004c8c;
+    --hdfc-red: #ed232a;
+    --bg-light: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Global Overrides */
+.stApp {
+    background-color: var(--bg-light);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sticky Header */
+.header-container {
+    background: var(--card-bg);
+    padding: 0.75rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.logo-text {
+    color: var(--hdfc-blue);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+.logo-accent {
+    color: var(--hdfc-red);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-item {
+    color: var(--text-muted);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.nav-item:hover, .nav-item.active {
+    color: var(--hdfc-blue);
+}
+
+/* Card Styling */
+.metric-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Chat Assistant Styling */
+.chat-container {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background: var(--hdfc-blue);
+    color: white;
+    padding: 1rem;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.bot-icon {
+    background: white;
+    color: var(--hdfc-blue);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Chat Message Overrides */
+[data-testid="stChatMessage"] {
+    background-color: #f1f5f9 !important;
+    border-radius: 12px !important;
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+[data-testid="stChatMessageContent"] p {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Custom Input Wrapper */
+.stChatInputContainer {
+    padding-bottom: 1rem !important;
+}
+
+.stChatInput {
+    border-radius: 12px !important;
+}
+
+/* Hide Streamlit components */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
