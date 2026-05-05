@@ -24,6 +24,6 @@ SCHEME_URLS = {
 }
 
 # RAG Settings
-EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+EMBEDDING_MODEL = "models/embedding-001" # Google Cloud Embedding Model
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50

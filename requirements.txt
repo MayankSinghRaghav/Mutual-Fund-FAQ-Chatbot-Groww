@@ -1,10 +1,9 @@
 requests
 beautifulsoup4
-sentence-transformers
 chromadb
 groq
 google-generativeai
-streamlit
 fastapi
 uvicorn
 python-multipart
+python-dotenv
