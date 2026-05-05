@@ -2,9 +2,8 @@ requests
 beautifulsoup4
 chromadb
 groq
-google-generativeai
 fastapi
 uvicorn
 python-multipart
 python-dotenv
-fastembed
+huggingface_hub

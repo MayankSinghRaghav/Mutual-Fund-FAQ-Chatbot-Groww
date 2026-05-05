@@ -24,6 +24,6 @@ SCHEME_URLS = {
 }
 
 # RAG Settings
-EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5" # Still the same name, but used via fastembed
+EMBEDDING_MODEL = "all-MiniLM-L6-v2" # Using HF Inference API
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
