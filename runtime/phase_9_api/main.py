@@ -1,3 +1,10 @@
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from runtime.retriever import Retriever
@@ -35,6 +42,9 @@ async def chat(request: ChatRequest):
     
     # 2. Retrieval
     results = retriever.retrieve(request.query)
+    if not results or not results['documents']:
+        return ChatResponse(answer="I couldn't find any information about that in the official documents.", sources=[])
+        
     context = "\n".join(results['documents'][0])
     sources = [m['source'] for m in results['metadatas'][0]]
     
@@ -46,4 +56,6 @@ async def chat(request: ChatRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import os
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

@@ -1,0 +1,26 @@
+services:
+  # Backend API
+  - type: web
+    name: rag-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn runtime.phase_9_api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: HF_TOKEN
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+
+  # Frontend (Static Site)
+  - type: static
+    name: rag-frontend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build
+    publishPath: frontend/out
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://rag-backend.onrender.com # Change this to your actual backend URL
