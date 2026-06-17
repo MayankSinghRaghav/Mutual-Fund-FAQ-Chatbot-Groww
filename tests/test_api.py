@@ -4,23 +4,19 @@ from fastapi.testclient import TestClient
 
 
 def make_app(retriever, generator):
-    """Build the FastAPI app with injected mocks (avoids importing live singletons)."""
-    # Patch heavy singletons before importing the module
+    """Build the FastAPI app with injected mocks (avoids importing live singletons).
+
+    Patches are active during the initial import so the module-level Retriever()
+    and Generator() calls don't hit real ChromaDB or Groq. After import the
+    module is cached, so subsequent calls only swap the singleton references.
+    """
     with patch("runtime.retriever.chromadb"), \
          patch("runtime.retriever.InferenceClient"), \
          patch("runtime.generator.Groq"), \
          patch.dict("os.environ", {"HF_TOKEN": "t", "GROQ_API_KEY": "t"}):
 
-        import importlib
-        import runtime.retriever as rmod
-        import runtime.generator as gmod
-        importlib.reload(rmod)
-        importlib.reload(gmod)
-
         import runtime.phase_9_api.main as api_mod
-        importlib.reload(api_mod)
 
-        # Replace module-level singletons with mocks
         api_mod.retriever = retriever
         api_mod.generator = generator
 
