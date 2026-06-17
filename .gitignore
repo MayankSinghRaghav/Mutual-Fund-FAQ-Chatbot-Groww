@@ -14,7 +14,7 @@ ENV/
 data/raw/
 data/chunked/
 data/embedded/
-# We keep data/chroma for now so the app works on clone
+data/chroma/
 
 # Next.js
 frontend/node_modules/
