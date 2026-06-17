@@ -42,7 +42,7 @@ async def chat(request: ChatRequest):
     
     # 2. Retrieval
     results = retriever.retrieve(request.query)
-    if not results or not results['documents']:
+    if not results or not results['documents'] or not results['documents'][0]:
         return ChatResponse(answer="I couldn't find any information about that in the official documents.", sources=[])
         
     context = "\n".join(results['documents'][0])
