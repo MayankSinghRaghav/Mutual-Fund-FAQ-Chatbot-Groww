@@ -6,6 +6,5 @@ fastapi
 uvicorn
 python-multipart
 python-dotenv
-huggingface_hub
 google-generativeai
 pysqlite3-binary; sys_platform == 'linux'

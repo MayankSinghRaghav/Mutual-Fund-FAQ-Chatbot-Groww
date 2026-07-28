@@ -18,8 +18,8 @@ Users ask plain-language questions about HDFC Mutual Fund schemes — expense ra
 │                      (run once to build DB)                      │
 │                                                                   │
 │   Groww URLs  ──►  scraper.py  ──►  chunker.py  ──►  embedder.py │
-│   (5 HDFC           (HTML)         (500-char       (HuggingFace   │
-│   schemes)                          chunks)         Inference API) │
+│   (5 HDFC           (HTML)         (500-char       (Gemini        │
+│   schemes)                          chunks)         Embedding API) │
 │                                                          │        │
 │                                                          ▼        │
 │                                                   vector_store.py │
@@ -40,7 +40,7 @@ Users ask plain-language questions about HDFC Mutual Fund schemes — expense ra
 │        │ safe                                                     │
 │        ▼                                                          │
 │   retriever.py                                                    │
-│   • embed query via HF Inference API                             │
+│   • embed query via Gemini Embedding API                         │
 │   • query ChromaDB  ──── no results? ──►  fallback message       │
 │   • return top-3 chunks + source URLs                            │
 │        │                                                          │
@@ -112,7 +112,7 @@ User types question
 ├── ingest/                     # One-time data pipeline
 │   ├── scraper.py              # Fetches Groww HTML pages
 │   ├── chunker.py              # Splits HTML text into 500-char chunks
-│   ├── embedder.py             # Generates embeddings via HF Inference
+│   ├── embedder.py             # Generates embeddings via Gemini Embedding API
 │   └── vector_store.py         # Loads chunks + embeddings into ChromaDB
 │
 ├── runtime/                    # Live API server
@@ -172,9 +172,8 @@ pip install -r requirements.txt
 Create a `.env` file in the project root:
 
 ```env
-HF_TOKEN=your_huggingface_token
 GROQ_API_KEY=your_groq_key
-GEMINI_API_KEY=your_gemini_key   # optional fallback
+GEMINI_API_KEY=your_gemini_key   # used for embeddings and as an LLM provider
 ```
 
 ### 3. Build the knowledge base (one-time)
@@ -279,7 +278,7 @@ GitHub Actions runs on every push and pull request to `main`:
 | Layer | Technology |
 |-------|-----------|
 | Scraping | `requests`, `BeautifulSoup4` |
-| Embeddings | HuggingFace Inference API (`all-MiniLM-L6-v2`) |
+| Embeddings | Google Gemini Embedding API (`text-embedding-004`) |
 | Vector DB | ChromaDB (persistent, on-disk) |
 | Backend | FastAPI + Uvicorn |
 | LLM | Groq (`llama-3.3-70b-versatile`) / Google Gemini (fallback) |

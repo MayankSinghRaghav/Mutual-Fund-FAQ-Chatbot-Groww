@@ -25,7 +25,6 @@ jobs:
 
       - name: Run tests with coverage
         env:
-          HF_TOKEN: dummy
           GROQ_API_KEY: dummy
           GEMINI_API_KEY: dummy
         run: pytest

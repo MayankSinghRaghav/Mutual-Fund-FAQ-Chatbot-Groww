@@ -24,6 +24,6 @@ SCHEME_URLS = {
 }
 
 # RAG Settings
-EMBEDDING_MODEL = "all-MiniLM-L6-v2" # Using HF Inference API
+EMBEDDING_MODEL = "models/text-embedding-004" # Using Gemini Embedding API
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
