@@ -10,8 +10,6 @@ services:
         value: 3.10.0
       - key: GEMINI_API_KEY
         sync: false
-      - key: HF_TOKEN
-        sync: false
       - key: GROQ_API_KEY
         sync: false
 

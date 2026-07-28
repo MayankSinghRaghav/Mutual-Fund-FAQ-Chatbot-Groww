@@ -11,9 +11,9 @@ def make_app(retriever, generator):
     module is cached, so subsequent calls only swap the singleton references.
     """
     with patch("runtime.retriever.chromadb"), \
-         patch("runtime.retriever.InferenceClient"), \
+         patch("runtime.retriever.genai"), \
          patch("runtime.generator.Groq"), \
-         patch.dict("os.environ", {"HF_TOKEN": "t", "GROQ_API_KEY": "t"}):
+         patch.dict("os.environ", {"GEMINI_API_KEY": "t", "GROQ_API_KEY": "t"}):
 
         import runtime.phase_9_api.main as api_mod
 

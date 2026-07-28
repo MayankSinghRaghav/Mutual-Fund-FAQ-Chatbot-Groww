@@ -7,8 +7,8 @@ class TestRetriever:
 
     def test_retrieve_returns_results_on_success(self):
         with patch("runtime.retriever.chromadb") as mock_chroma_mod, \
-             patch("runtime.retriever.InferenceClient") as mock_hf_cls, \
-             patch.dict("os.environ", {"HF_TOKEN": "fake-token"}):
+             patch("runtime.retriever.genai") as mock_genai, \
+             patch.dict("os.environ", {"GEMINI_API_KEY": "fake-key"}):
 
             mock_collection = MagicMock()
             mock_collection.query.return_value = {
@@ -17,9 +17,7 @@ class TestRetriever:
             }
             mock_chroma_mod.PersistentClient.return_value.get_collection.return_value = mock_collection
 
-            embedding = MagicMock()
-            embedding.tolist.return_value = [0.1, 0.2, 0.3]
-            mock_hf_cls.return_value.feature_extraction.return_value = embedding
+            mock_genai.embed_content.return_value = {"embedding": [0.1, 0.2, 0.3]}
 
             from runtime.retriever import Retriever
             retriever = Retriever()
@@ -30,12 +28,12 @@ class TestRetriever:
 
     def test_retrieve_returns_none_on_exception(self):
         with patch("runtime.retriever.chromadb") as mock_chroma_mod, \
-             patch("runtime.retriever.InferenceClient") as mock_hf_cls, \
-             patch.dict("os.environ", {"HF_TOKEN": "fake-token"}):
+             patch("runtime.retriever.genai") as mock_genai, \
+             patch.dict("os.environ", {"GEMINI_API_KEY": "fake-key"}):
 
             mock_collection = MagicMock()
             mock_chroma_mod.PersistentClient.return_value.get_collection.return_value = mock_collection
-            mock_hf_cls.return_value.feature_extraction.side_effect = RuntimeError("HF API down")
+            mock_genai.embed_content.side_effect = RuntimeError("Gemini API down")
 
             from runtime.retriever import Retriever
             retriever = Retriever()
@@ -43,11 +41,10 @@ class TestRetriever:
 
         assert result is None
 
-    def test_retrieve_flattens_nested_embedding(self):
-        """If HF returns a list-of-lists, retrieve should use the inner list."""
+    def test_retrieve_passes_query_embedding(self):
         with patch("runtime.retriever.chromadb") as mock_chroma_mod, \
-             patch("runtime.retriever.InferenceClient") as mock_hf_cls, \
-             patch.dict("os.environ", {"HF_TOKEN": "fake-token"}):
+             patch("runtime.retriever.genai") as mock_genai, \
+             patch.dict("os.environ", {"GEMINI_API_KEY": "fake-key"}):
 
             mock_collection = MagicMock()
             mock_collection.query.return_value = {
@@ -56,8 +53,7 @@ class TestRetriever:
             }
             mock_chroma_mod.PersistentClient.return_value.get_collection.return_value = mock_collection
 
-            # Simulate list-of-lists return (nested embedding)
-            mock_hf_cls.return_value.feature_extraction.return_value = [[0.1, 0.2, 0.3]]
+            mock_genai.embed_content.return_value = {"embedding": [0.1, 0.2, 0.3]}
 
             from runtime.retriever import Retriever
             retriever = Retriever()
@@ -69,16 +65,14 @@ class TestRetriever:
 
     def test_retrieve_uses_top_k(self):
         with patch("runtime.retriever.chromadb") as mock_chroma_mod, \
-             patch("runtime.retriever.InferenceClient") as mock_hf_cls, \
-             patch.dict("os.environ", {"HF_TOKEN": "fake-token"}):
+             patch("runtime.retriever.genai") as mock_genai, \
+             patch.dict("os.environ", {"GEMINI_API_KEY": "fake-key"}):
 
             mock_collection = MagicMock()
             mock_collection.query.return_value = {"documents": [[]], "metadatas": [[]]}
             mock_chroma_mod.PersistentClient.return_value.get_collection.return_value = mock_collection
 
-            embedding = MagicMock()
-            embedding.tolist.return_value = [0.1]
-            mock_hf_cls.return_value.feature_extraction.return_value = embedding
+            mock_genai.embed_content.return_value = {"embedding": [0.1]}
 
             from runtime.retriever import Retriever
             retriever = Retriever()
@@ -89,16 +83,14 @@ class TestRetriever:
 
     def test_retrieve_default_top_k_is_3(self):
         with patch("runtime.retriever.chromadb") as mock_chroma_mod, \
-             patch("runtime.retriever.InferenceClient") as mock_hf_cls, \
-             patch.dict("os.environ", {"HF_TOKEN": "fake-token"}):
+             patch("runtime.retriever.genai") as mock_genai, \
+             patch.dict("os.environ", {"GEMINI_API_KEY": "fake-key"}):
 
             mock_collection = MagicMock()
             mock_collection.query.return_value = {"documents": [[]], "metadatas": [[]]}
             mock_chroma_mod.PersistentClient.return_value.get_collection.return_value = mock_collection
 
-            embedding = MagicMock()
-            embedding.tolist.return_value = [0.1]
-            mock_hf_cls.return_value.feature_extraction.return_value = embedding
+            mock_genai.embed_content.return_value = {"embedding": [0.1]}
 
             from runtime.retriever import Retriever
             retriever = Retriever()
