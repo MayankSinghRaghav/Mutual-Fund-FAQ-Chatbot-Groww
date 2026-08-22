@@ -71,7 +71,7 @@ export default function Home() {
             <h2 className="text-lg font-bold mb-4">Your investments</h2>
             <div className="bg-white p-10 rounded-lg border border-gray-100 shadow-sm text-center">
               <img src="https://groww.in/assets/images/no_investment.svg" alt="Empty" className="w-24 mx-auto mb-4 opacity-50" />
-              <p className="text-sm text-gray-400">You haven't invested yet</p>
+              <p className="text-sm text-gray-400">You haven&apos;t invested yet</p>
             </div>
           </section>
 
